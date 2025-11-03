@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoBus - Payment Page</title>
+  <link rel="icon" href="Group2.jpg">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+      margin: 0;
+      padding: 0;
+      color: #0d47a1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #1565c0;
+      color: #fff;
+      padding: 12px 20px;
+    }
+  
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: bold;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    }
+    
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background: #fff;
+      border-radius: 20px;
+      margin: 30px;
+      padding: 40px 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+    .content-box {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Ticket info */
+    .ticket-info {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .ticket-info h3 {
+      margin: 0 0 10px 0;
+    }
+
+    /* Payment form */
+    .payment-form {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+      gap: 15px;
+    }
+    .payment-methods {
+      display: flex;
+      gap: 15px;
+    }
+    .payment-methods label {
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+    .payment-form label {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .payment-form input {
+      padding: 10px;
+      border: 2px solid #64b5f6;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+    }
+    .payment-form input:focus {
+      border-color: #1565c0;
+      box-shadow: 0 0 6px rgba(21, 101, 192, 0.4);
+    }
+    .payment-form .row {
+      display: flex;
+      gap: 15px;
+    }
+    .payment-form .row input {
+      flex: 1;
+    }
+    .payment-form .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+    .pay-btn{
+      background: #4444ab;
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .pay-btn:hover {
+      background: #0d47a1;
+    }
+    .cancel-btn:hover{
+      background: #c62828;
+    }
+    .cancel-btn {
+      background: #e53935;
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    
+    }
+    /* UPI QR */
+    .upi-box {
+      text-align: center;
+    }
+    .upi-box img {
+      width: 200px;
+      height: 200px;
+      margin: 10px 0;
+      border: 4px solid #64b5f6;
+      border-radius: 12px;
+    }
+
+    /* Footer */
+    footer {
+      background: #1565c0;
+      padding: 12px 20px;
+      text-align: center;
+    }
+    footer button {
+      margin: 5px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    footer .logout {
+      background: #e53935;
+      color: #fff;
+    }
+    footer .logout:hover {
+      background: #c62828;
+    }
+    footer .info {
+      background: #64b5f6;
+      color: #fff;
+    }
+    footer .info:hover {
+      background: #1e88e5;
+    }
+    /* Title Styling */
+.page-title {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 36px;         /* bigger */
+  font-weight: 900;        /* bold */
+  color: #224060;          /* deep blue */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+  position: relative;
+}
+.page-title::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #64b5f6, #1565c0);
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+.logo-container {
+      display: flex;
+      align-items: center;
+      background-color: rgb(121, 174, 214);
+      padding: 6px 12px;
+      border-radius: 40px;
+      position: sticky;
+    }
+    .logo-container img {
+      height: 45px;
+      width: 45px;
+      margin-right: 10px;
+      border-radius: 50%;
+    }
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: black;
+      letter-spacing: 0.08em;
+      user-select: none;
+    }
+
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .payment-form .row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+      <div class="logo-container" title="Go Bus">
+      <img src="Group2.jpg" alt="GoBus Logo" />
+      <div class="logo-text">Go Bus</div>
+    </div>
+  </header>
+
+  <!-- Middle content -->
+  <div class="main-content">
+    <div class="content-box">
+   <h2 class="page-title">Payment</h2>
+
+
+      <!-- Fixed ticket info -->
+      <div class="ticket-info">
+        <h3>Selected Bus</h3>
+        <p><strong>Bus:</strong> Volvo AC Sleeper</p>
+        <p><strong>Route:</strong> Kolkata → Digha</p>
+        <p><strong>Date:</strong> 15 Sept 2025</p>
+        <p><strong>Ticket Expiry:</strong> Auto-set from Database</p>
+        <p><strong>Fare:</strong> ₹1500</p>
+      </div>
+
+      <!-- Payment form -->
+      <form class="payment-form" id="paymentForm">
+        <div class="payment-methods">
+          <label><input type="radio" name="method" value="card" checked=""> Card</label>
+          <label><input type="radio" name="method" value="upi"> UPI</label>
+        </div>
+
+        <!-- Card Payment -->
+        <div id="cardFields">
+          <div>
+            <label for="name">Cardholder Name</label>
+            <input type="text" id="name" placeholder="Enter cardholder name">
+          </div>
+          <div>
+            <label for="cardNumber">Card Number</label>
+            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+          </div>
+          <div class="row">
+            <div>
+              <label for="expiry">Expiry Date</label>
+              <input type="text" id="expiry" value="Auto from DB" readonly="">
+            </div>
+            <div>
+              <label for="cvv">pin</label>
+              <input type="password" id="cvv" placeholder="123" maxlength="3">
+            </div>
+          </div>
+        </div>
+
+        <!-- UPI QR -->
+        <div id="upiFields" class="hidden upi-box">
+          <p>Scan the QR code to pay via UPI</p>
+          <img src="./GoBus - Payment Page_files/saved_resource" alt="UPI QR">
+        </div>
+
+        <button class="pay-btn" id="pay"type="submit">Pay Now</button>
+        <button type="button" class="cancel-btn" onclick="window.location.href='bookseat.html'">Cancel❌</button>
+      </form>
+    </div>
+  </div>
+
+
+
+  <script>
+    // Switch payment method
+    const cardFields = document.getElementById('cardFields');
+    const upiFields = document.getElementById('upiFields');
+    document.querySelectorAll('input[name="method"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (radio.value === "card") {
+          cardFields.classList.remove('hidden');
+          upiFields.classList.add('hidden');
+        } else {
+          cardFields.classList.add('hidden');
+          upiFields.classList.remove('hidden');
+        }
+      });
+    });
+
+    let v=document.getElementById("pay");
+    v.addEventListener("click",function(){
+      alert("payment successful!  ticket booked successfully");
+      window.open("afterpay_interface.html");
+    });
+  </script>
+
+
+</body></html>

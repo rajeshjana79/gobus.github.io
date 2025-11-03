@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Conductor Interface — OTP Validation</title>
+  <style>
+    :root{ --bg:#f3f6fb;
+       --card:#ffffff;
+        --primary:#0f62fe;
+         --muted:#64748b;
+          --success:#16a34a; 
+          --danger:#ef4444;
+         }
+    *{box-sizing:border-box;
+      font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif
+    }
+    body{margin:0;
+      background:linear-gradient(180deg,#eef4ff 0%,var(--bg) 100%);
+      color:#0f1724;
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:32px auto;
+      padding:20px
+    }
+    header{
+      display:flex;
+      align-items:center;
+      gap:16px;
+      margin-bottom:18px;
+    
+}
+    .logo{
+      width:56px;
+      height:56px;
+      border-radius:10px;
+      background:linear-gradient(135deg,var(--primary),#6fb1ff);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-weight:700;
+    }
+    
+    h1{
+      font-size:18px;margin:0}
+    p.lead{margin:0;color:var(--muted);font-size:13px}
+    .grid{display:grid;grid-template-columns:320px 1fr;gap:18px}
+    .card{background:var(--card);border-radius:12px;padding:16px;box-shadow:0 6px 18px rgba(14,30,37,0.06)}
+    .profile{display:flex;gap:12px;align-items:center}
+    .avatar{width:56px;height:56px;border-radius:10px;background:#e6f0ff;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--primary)}
+    .meta small{display:block;color:var(--muted);font-size:12px}
+    .stats{display:flex;gap:8px;margin-top:12px}
+    .stat{flex:1;background:#fbfdff;padding:10px;border-radius:8px;text-align:center}
+    .stat b{display:block;font-size:18px}
+    .controls{display:flex;gap:12px;align-items:center;margin-bottom:16px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--primary);color:white;text-decoration:none;border:none;cursor:pointer}
+    .btn.ghost{background:transparent;color:var(--primary);border:1px solid rgba(15,98,254,0.12)}
+    .trip-list{display:grid;gap:12px}
+    .trip{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;border:1px solid #eef3ff}
+    .trip .info{max-width:70%}
+    .trip h3{margin:0;font-size:15px}
+    .trip small{color:var(--muted)}
+    .overlay{position:fixed;inset:0;background:rgba(2,6,23,0.4);display:none;align-items:center;justify-content:center;padding:20px;z-index:60}
+    .otp-modal{width:420px;max-width:100%;background:var(--card);border-radius:14px;padding:20px;box-shadow:0 14px 32px rgba(2,6,23,0.16)}
+    .otp-row{display:flex;gap:8px;margin:16px 0}
+    .otp-row input{width:46px;height:56px;text-align:center;font-size:22px;border-radius:10px;border:1px solid #e6eefc}
+    .muted{color:var(--muted);font-size:13px}
+    .actions{display:flex;gap:8px;align-items:center;margin-top:8px}
+    .timer{font-weight:600}
+    .hint{font-size:12px;color:var(--muted);margin-top:8px}
+    @media (max-width:800px){.grid{grid-template-columns:1fr}.controls{flex-wrap:wrap}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">C</div>
+      <div>
+        <h1>Conductor Panel</h1>
+        <p class="lead">Quickly validate passenger tickets using OTP — secure and simple.</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <aside class="card">
+        <div class="profile">
+          <div class="avatar">RK</div>
+          <div class="meta">
+            <strong>Rajesh Kumar</strong>
+            <small>Conductor — Route 14</small>
+            <small class="muted">Shift: 06:00 — 14:00</small>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><small>Passengers</small><b>24</b></div>
+          <div class="stat"><small>Validated</small><b>18</b></div>
+          <div class="stat"><small>Pending</small><b>6</b></div>
+        </div>
+
+        <hr style="margin:16px 0;border:none;border-top:1px solid #f1f5f9">
+        <div>
+          <small class="muted">Scanner</small>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <button class="btn" id="openManual">Manual OTP</button>
+            <button class="btn ghost" id="openScan">Simulate Scan</button>
+          </div>
+        </div>
+      </aside>
+
+      <main>
+        <div class="card">
+          <div class="controls">
+            <button class="btn" id="newTrip">New Trip</button>
+            <button class="btn ghost" id="refresh">Refresh</button>
+            <div style="margin-left:auto;color:var(--muted);font-size:13px">Route: Downtown — Airport</div>
+          </div>
+
+          <div class="trip-list" id="tripList">
+            <!-- sample passengers -->
+            <div class="trip" data-phone="+919876543210">
+              <div class="info">
+                <h3>Rina Sharma</h3>
+                <small class="muted">Seat 12A • Ticket: #A2345</small>
+              </div>
+              <div>
+                <button class="btn" onclick="startOtpFlow(this)">Validate</button>
+              </div>
+            </div>
+
+            <div class="trip" data-phone="+919812345678">
+              <div class="info">
+                <h3>Vikram Singh</h3>
+                <small class="muted">Seat 3B • Ticket: #A2346</small>
+              </div>
+              <div>
+                <button class="btn" onclick="startOtpFlow(this)">Validate</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+        <div class="card">
+          <h3 style="margin-top:0">Activity Log</h3>
+          <div id="log" style="font-size:13px;color:var(--muted);">No actions yet.</div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- OTP overlay -->
+  <div class="overlay" id="overlay">
+    <div class="otp-modal" role="dialog" aria-modal="true" aria-labelledby="otptitle">
+      <h2 id="otptitle">Enter OTP</h2>
+      <p class="muted" id="otpSubtitle">We sent a 6‑digit code to <strong id="maskedPhone">+91‑xxxxx1234</strong></p>
+
+      <div class="otp-row" id="otpInputs" aria-label="OTP digits">
+        <input inputmode="numeric" maxlength="1" pattern="[0-9]*" />
+        <input inputmode="numeric" maxlength="1" pattern="[0-9]*" />
+        <input inputmode="numeric" maxlength="1" pattern="[0-9]*" />
+        <input inputmode="numeric" maxlength="1" pattern="[0-9]*" />
+        <input inputmode="numeric" maxlength="1" pattern="[0-9]*" />
+        <input inputmode="numeric" maxlength="1" pattern="[0-9]*" />
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="verifyBtn">Verify</button>
+        <button class="btn ghost" id="cancelBtn">Cancel</button>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+          <div class="muted">Resend in <span class="timer" id="timer">30s</span></div>
+          <button class="btn ghost" id="resendBtn" disabled>Resend</button>
+        </div>
+      </div>
+
+      <p class="hint">Tip: you can paste the entire 6‑digit OTP into any box. OTP is valid for 5 minutes.</p>
+    </div>
+  </div>
+
+  <script>
+    /
+    let generatedOtp = null;
+    let otpExpiresAt = null;
+    let resendLock = null; // seconds left
+    let activePassengerEl = null;
+
+    function mask(phone){
+      // naive mask for demo
+      return phone.replace(/(\+\d{2})(\d{3})(\d{3})(\d{3})/, (m,a,b,c,d)=> a+'-'+b.replace(/\d/g,'x')+c.slice(-3));
+    }
+
+    function log(msg){
+      const logEl = document.getElementById('log');
+      const now = new Date().toLocaleTimeString();
+      const entry = document.createElement('div');
+      entry.textContent = `${now} — ${msg}`;
+      if(logEl.textContent.trim()==='No actions yet.') logEl.textContent='';
+      logEl.prepend(entry);
+    }
+
+    function startOtpFlow(btn){
+      const trip = btn.closest('.trip');
+      activePassengerEl = trip;
+      const phone = trip.dataset.phone;
+      document.getElementById('maskedPhone').textContent = mask(phone);
+      openOtpOverlay();
+      sendOtp(phone);
+    }
+
+    function openOtpOverlay(){
+      document.getElementById('overlay').style.display='flex';
+      focusFirstOtpInput();
+    }
+    function closeOtpOverlay(){
+      document.getElementById('overlay').style.display='none';
+      clearOtpInputs();
+      activePassengerEl = null;
+    }
+
+    // generate and "send" OTP (simulation)
+    function sendOtp(phone){
+      generatedOtp = String(Math.floor(100000 + Math.random()*900000));
+      otpExpiresAt = Date.now() + 5*60*1000; // 5 minutes validity
+      resendLock = 30; // 30s
+      updateTimer();
+      log(`OTP ${generatedOtp} generated for ${phone}. (demo)`);
+      // show masked phone is handled
+    }
+
+    // timer handling
+    let timerInterval = null;
+    function updateTimer(){
+      clearInterval(timerInterval);
+      timerInterval = setInterval(()=>{
+        if(resendLock>0){
+          document.getElementById('timer').textContent = resendLock+'s';
+          document.getElementById('resendBtn').disabled = true;
+          resendLock--;
+        } else {
+          document.getElementById('timer').textContent = '0s';
+          document.getElementById('resendBtn').disabled = false;
+          clearInterval(timerInterval);
+        }
+      },1000);
+    }
+
+    // OTP input handling
+    const otpInputs = Array.from(document.querySelectorAll('#otpInputs input'));
+    otpInputs.forEach((input,i)=>{
+      input.addEventListener('input', (e)=>{
+        const v = e.target.value.replace(/[^0-9]/g,'');
+        e.target.value = v;
+        if(v && i<otpInputs.length-1) otpInputs[i+1].focus();
+        // if pasted more than 1 char
+        if(v.length>1){
+          const chars = v.split('');
+          for(let k=0;k<otpInputs.length;k++) otpInputs[k].value = chars[k]||'';
+        }
+      });
+      input.addEventListener('keydown', (e)=>{
+        if(e.key==='Backspace' && !e.target.value && i>0){
+          otpInputs[i-1].focus();
+        }
+      });
+      input.addEventListener('paste', (e)=>{
+        const text = (e.clipboardData || window.clipboardData).getData('text');
+        if(/^[0-9]{6}$/.test(text)){
+          for(let k=0;k<6;k++) otpInputs[k].value = text[k];
+        }
+        e.preventDefault();
+      });
+    });
+
+    function focusFirstOtpInput(){ otpInputs[0].focus(); }
+    function clearOtpInputs(){ otpInputs.forEach(i=>i.value=''); }
+
+    document.getElementById('verifyBtn').addEventListener('click', ()=>{
+      const code = otpInputs.map(i=>i.value).join('');
+      if(code.length!==6){ alert('Enter the full 6-digit OTP.'); return; }
+      // check expiry
+      if(!generatedOtp || Date.now()>otpExpiresAt){ alert('OTP expired. Please resend.'); return; }
+      if(code===generatedOtp){
+        log(`Passenger ${activePassengerEl.querySelector('h3').innerText} validated (OTP matched).`);
+        alert('OTP valid — passenger confirmed.');
+        closeOtpOverlay();
+      } else {
+        log(`Failed OTP attempt for ${activePassengerEl.querySelector('h3').innerText}.`);
+        alert('Incorrect OTP — please try again.');
+      }
+    });
+
+    document.getElementById('cancelBtn').addEventListener('click', closeOtpOverlay);
+    document.getElementById('openManual').addEventListener('click', ()=>{
+      // open overlay for manual entry without selecting passenger
+      activePassengerEl = null;
+      document.getElementById('maskedPhone').textContent = '+91‑xxxxx1234';
+      openOtpOverlay();
+      sendOtp('+919999999999');
+    });
+    document.getElementById('openScan').addEventListener('click', ()=>{
+      // simulate scanning a QR -> pop OTP for a passenger (pick first passenger)
+      const first = document.querySelector('.trip');
+      if(first) startOtpFlow(first.querySelector('button'));
+    });
+
+    document.getElementById('resendBtn').addEventListener('click', ()=>{
+      if(resendLock>0) return;
+      const phone = activePassengerEl ? activePassengerEl.dataset.phone : '+919999999999';
+      sendOtp(phone);
+      document.getElementById('resendBtn').disabled = true;
+    });
+
+    // fallback: close on overlay background click
+    document.getElementById('overlay').addEventListener('click',(e)=>{ if(e.target===e.currentTarget) closeOtpOverlay(); });
+
+    // new trip & refresh demo handlers
+    document.getElementById('newTrip').addEventListener('click', ()=>{ alert('New trip creation is a placeholder in this demo.'); });
+    document.getElementById('refresh').addEventListener('click', ()=>{ log('Refreshed passenger list.'); });
+
+  </script>
+</body>
+</html>

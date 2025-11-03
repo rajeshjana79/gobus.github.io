@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="Group2.jpg">
+  <title>Login Page</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      display:flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(360deg, #f1f3f5, #e4e4e4, #dee9ec);
+      overflow-x: hidden;
+      padding:1rem;
+    }
+
+    .switch-bar {
+      width: 1000px;
+      max-width: 95%;
+      margin-bottom: 30px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(27, 15, 15, 0.25);
+      position: relative;
+      display: flex;
+      border-radius: 40px;
+      z-index: 5;
+    }
+    .switch-bar button {
+      flex: 1;
+      padding: 18px 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 600;
+      color: black;
+      transition: 0.5s;
+      z-index: 1;
+      border-radius: 20%;
+      user-select: none;
+    }
+    .switch-bar button.active {
+      color: #faf6f6;
+      border-radius: 25px;
+    }
+    .switch-bar .slider {
+      position: absolute;
+      bottom: 0;
+      top: 0;
+      width: 50%;
+      background: linear-gradient(360deg, #6666cf, #7a4fdf);
+      transition: transform 0.6s ease;
+      border-radius: 25px;
+      box-shadow: 0 0 20px rgba(18, 19, 21, 0.7);
+    }
+
+    /* Container */
+    .container {
+      position: relative;
+      width: 1000px;
+      max-width: 95%;
+      height: 500px;
+      background: #e0d0d0;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+      transition: box-shadow 0.5s;
+      z-index: 1;
+    }
+  
+    .container.active {
+      box-shadow: 0 0 40px rgba(10, 15, 16, 0.7);
+    }
+
+    /* Inner wrapper */
+    .inner-wrapper {
+      display: flex;
+      width: 200%;
+      height: 100%;
+      transition: transform 0.7s cubic-bezier(.77, 0, .175, 1);
+    }
+
+    /* Panels */
+    .panel {
+      width: 50%;
+      flex-shrink: 0;
+      display: flex;
+      position: relative;
+    }
+
+    .info-box {
+      flex: 1;
+      background: linear-gradient(135deg, #7ca7a4, #626455);
+      color: #f0e9e9;
+      padding:38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+    .info-box h3 {
+      font-size: 29px;
+      margin-bottom: 15px;
+      font-family: bold;
+
+    }
+    .info-box p {
+      font-size: 16px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+      max-width: 350px;
+      font-family: bold;
+    }
+    .bus-img {
+      width: 100%;
+      margin-top: 20px;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      opacity: 0;
+      pointer-events: none;
+      user-select: none;
+      position: relative;
+      z-index: 2;
+      width: 250px;
+      border-radius: 25px;
+      
+
+
+    }
+    .panel.active .bus-img {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    /* Form Box */
+    .form-box {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: #e2e2f4;
+    }
+    .forms-wrapper {
+      display: flex;
+      width: 200%;
+      transition: transform 0.6s ease-in-out;
+      position: relative;
+    }
+    #loginForm.form {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      padding: 0 1px;
+    }
+    #signupForm.form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 0 1px;
+    }
+
+  
+
+    /* Input box */
+    .input-box {
+      margin-bottom: 10px;
+      position: relative;
+      width: 100%;
+    }
+    .input-box input {
+      width: 100%;
+      padding: 12px 40px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      font-size: 15px;
+      transition: 0.3s;
+      background-color: #f9fbff;
+    }
+    .input-box input:focus {
+      border-color: #080808;
+      box-shadow: 0 0 8px rgba(9, 9, 9, 0.4);
+    }
+    .input-box .icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #101011;
+    }
+    .input-box .toggle-eye {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #060606;
+      user-select: none;
+    }
+
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+    .options a {
+      color: #086df1;
+      text-decoration: none;
+    }
+    .options a:hover {
+      text-decoration: underline;
+      
+
+    }
+    .btn {
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #4277b9;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      user-select: none;
+    }
+    .btn:hover {
+      background: #1c6fd6;
+       box-shadow: 0 0 10px rgba(10, 12, 14, 0.6);
+       font-size: 15px;
+    }
+
+    .toggle {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 12px;
+    }
+    .toggle a {
+      color: #2e8bfa;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .toggle a:hover {
+      text-decoration: underline;
+    }
+    .panel-title {
+      position: absolute;
+      font-size: 24px;
+      font-weight: 700;
+      color: #0e0d0d;
+      text-shadow: 0 0 8px rgba(0,0,0,0.3);
+      user-select: none;
+    }
+    .panel-title-center {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 0 8px rgba(0,0,0,0.3);
+      user-select: none;
+    } 
+.panel-title,
+.panel-title-center {
+  position: absolute;
+  top: 30px; 
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 26px;
+  font-weight: 700;
+  color: #0e0d0d;
+  text-shadow: 0 0 8px rgba(0,0,0,0.3);
+  user-select: none;
+}
+.text{
+    text-align: center;
+    color: black;
+    font-size: 25px;
+    font-family:bold;
+    margin-bottom: 50px;
+    font-weight: bolder;
+
+}
+.error-message{
+      color:red;
+      font-size: 0.8rem;
+      margin-top: 5px;
+      display: none;
+    }
+   
+    #backToSignup {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  font-size: 30px;
+  cursor: pointer;
+  color: #191818;
+  transition: color 0.3s, transform 0.2s;
+}
+
+#backToSignup:hover {
+  color: #0866da;   
+  transform: scale(1.2); 
+}
+
+  
+    @media (max-width: 768px) {
+     .input-box{
+      margin-bottom: 10px;
+
+     }
+      .panel:first-child {
+        display: none;
+      }
+      .panel:last-child {
+        display: flex;
+        width: 100% !important;
+      }
+      .container.show-signin .panel:first-child {
+        display: flex;
+        width: 100% !important;
+      }
+      .container.show-signin .panel:last-child {
+        display: none;
+      } 
+      
+    }
+   
+@media (max-width: 768px) {
+  .switch-bar {
+    width: 75%;     
+    height: 40px;   
+    margin-top: 50px; 
+   
+    
+  }
+
+
+  .switch-bar button {
+    font-size: 16px; 
+    padding: 10px; 
+    margin-bottom: 10px;
+   
+  }
+
+  .switch-bar .slider {
+    border-radius:50px;
+    text-align: center;
+
+
+  }
+}
+  </style>
+</head>
+<body>
+
+ 
+
+  <div class="switch-bar">
+    <div class="slider"></div>
+    <button id="signInBtn" class="active">Sign In</button>
+    <button id="signUpBtn">Sign Up</button>
+  </div>
+
+  <div class="container show-signin" id="container">
+    <div class="inner-wrapper" id="innerWrapper">
+
+      <!-- Sign in -->
+      <div class="panel active" id="signInPanel">
+        <div class="form-box">
+          <div class="text">Login</div>
+          <div class="forms-wrapper" id="formsWrapper">
+            <form id="loginForm" class="form">
+             
+              <div class="input-box">
+                <i class="fa-solid fa-user icon"></i>
+                <input type="text" id="loginEmail" placeholder="Username or Email" required />
+                <div id="loginEmailError" class="error-message">Enter a valid email or username.</div>
+              </div>
+              <div class="input-box">
+                <i class="fa-solid fa-lock icon"></i>
+                <input type="password" id="loginPassword" placeholder="Password" required />
+                <i id="toggleLoginPassword" class="fa fa-eye toggle-eye"></i>
+              </div>
+              <div id="loginError" class="error-message">
+                Password must be at least 8 characters, include lowercase, number, and special character.
+              </div>
+              
+              <div class="options">
+                <label>
+                  <input type="checkbox" id="rememberMe" /> Remember me
+                </label>
+              </div>
+              <button class="btn" type="submit">Login</button>
+              <div class="toggle">
+                Don’t have an account? <a href="#" id="toSignup">Create account</a>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="info-box">
+          <h3>Welcome to go bus🚍</h3>
+          <p>Track buses live, get accurate arrival times, and plan your journey smartly.</p>
+          <img class="bus-img" src="gobus.jpg" alt="Bus" />
+        </div>
+      </div>
+
+      <!-- Sign Up-->
+      <div class="panel" id="signUpPanel">
+        <div class="info-box">
+          <h3>Join go bus🚍</h3>
+          <p>Create your account to enjoy go bus travel.</p>
+          <img class="bus-img" src="gobus.jpg" alt="Bus" />
+        </div>
+        <div class="form-box">
+          <form id="signupForm" class="form">
+            <div class="text">Create Account</div>
+            <div class="input-box">
+              <i class="fa-solid fa-user icon"></i>
+              <input type="text" id="firstName" placeholder="First Name" required />
+            </div>
+            <div class="input-box">
+              <i class="fa-solid fa-user icon"></i>
+              <input type="text" id="lastName" placeholder="Last Name" required />
+            </div>
+            <div class="input-box">
+              <i class="fa-solid fa-envelope icon"></i>
+              <input type="email" id="signupEmail" placeholder="Email" required />
+              <div id="signupEmailError" class="error-message">Enter a valid email address.</div>
+            </div>
+            <div class="input-box">
+              <i class="fa-solid fa-lock icon"></i>
+              <input type="password" id="signupPassword" placeholder="Password" required />
+              <i id="toggleSignupPassword" class="fa fa-eye toggle-eye"></i>
+            </div>
+            <div id="signupError" class="error-message">
+              Password must be at least 8 characters, include lowercase, number, and special character.
+            </div>
+            
+            <div class="input-box">
+              <i class="fa-solid fa-lock icon"></i>
+              <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+              <i id="toggleConfirmPassword" class="fa fa-eye toggle-eye"></i>
+            </div>
+            <button class="btn" type="submit"a href="">Sign Up</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const signInBtn = document.getElementById("signInBtn");
+    const signUpBtn = document.getElementById("signUpBtn");
+    const slider = document.querySelector(".slider");
+    const innerWrapper = document.getElementById("innerWrapper");
+    const container = document.getElementById("container");
+    const toSignup = document.getElementById("toSignup");
+    
+
+    const signInPanel = document.getElementById("signInPanel");
+    const signUpPanel = document.getElementById("signUpPanel");
+
+    function activateSignInPanel() {
+      signInPanel.classList.add("active");
+      signUpPanel.classList.remove("active");
+    }
+    function activateSignUpPanel() {
+      signInPanel.classList.remove("active");
+      signUpPanel.classList.add("active");
+    }
+
+    signInBtn.addEventListener("click", () => {
+      signInBtn.classList.add("active");
+      signUpBtn.classList.remove("active");
+      innerWrapper.style.transform = "translateX(0)";
+      slider.style.transform = "translateX(0)";
+      container.classList.add("show-signin");
+      activateSignInPanel();
+    });
+
+    signUpBtn.addEventListener("click", () => {
+      signUpBtn.classList.add("active");
+      signInBtn.classList.remove("active");
+      innerWrapper.style.transform = "translateX(-50%)";
+      slider.style.transform = "translateX(100%)";
+      container.classList.remove("show-signin");
+      activateSignUpPanel();
+    });
+
+    toSignup.addEventListener("click", (e) => {
+      e.preventDefault();
+      signUpBtn.click();
+    });
+
+    function toggleVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (icon) {
+        icon.addEventListener("click", () => {
+          if (input.type === "password") {
+            input.type = "text";
+            icon.classList.replace("fa-eye", "fa-eye-slash");
+          } else {
+            input.type = "password";
+            icon.classList.replace("fa-eye-slash", "fa-eye");
+          }
+        });
+      }
+    }
+    toggleVisibility("loginPassword", "toggleLoginPassword");
+    toggleVisibility("signupPassword", "toggleSignupPassword");
+    toggleVisibility("confirmPassword", "toggleConfirmPassword");
+
+    function googleLogin() {
+      alert("Google Sign-In Clicked ✅ (demo only)");
+    }
+
+    // Passvalidation 
+    const passwordRegex = /^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[a-z\d@$!%*?&]{8,}$/;
+
+    // Realtime val
+    document.getElementById("signupPassword").addEventListener("input", function () {
+      const pass = this.value;
+      const error = document.getElementById("signupError");
+      if (passwordRegex.test(pass)) {
+        error.style.display = "none";
+      } else {
+        error.style.display = "block";
+      }
+    });
+
+    // ConPass
+    document.getElementById("confirmPassword").addEventListener("input", function () {
+      const pass = document.getElementById("signupPassword").value;
+      const confirm = this.value;
+      const error = document.getElementById("signupError");
+      if (confirm === pass && passwordRegex.test(pass)) {
+        error.style.display = "none";
+      } else {
+        error.style.display = "block";
+      }
+    });
+
+    // Logpass
+    document.getElementById("loginPassword").addEventListener("input", function () {
+      const pass = this.value;
+      const error = document.getElementById("loginError");
+      if (passwordRegex.test(pass)) {
+        error.style.display = "none";
+      } else {
+        error.style.display = "block";
+      }
+    });
+
+    // Email validation regex
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Login email/username validation
+document.getElementById("loginEmail").addEventListener("input", function () {
+  const val = this.value;
+  const error = document.getElementById("loginEmailError");
+  if (val.length < 3 || (!emailRegex.test(val) && val.indexOf(" ") !== -1)) {
+    error.style.display = "block";
+  } else {
+    error.style.display = "none";
+  }
+});
+
+// Signup email validation
+document.getElementById("signupEmail").addEventListener("input", function () {
+  const val = this.value;
+  const error = document.getElementById("signupEmailError");
+  if (!emailRegex.test(val)) {
+    error.style.display = "block";
+  } else {
+    error.style.display = "none";
+  }
+});
+
+// Login form submit validation
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const emailInput = document.getElementById("loginEmail");
+  const passInput = document.getElementById("loginPassword");
+  const rememberMe = document.getElementById("rememberMe");
+  const emailError = document.getElementById("loginEmailError");
+  const passError = document.getElementById("loginError");
+
+  let valid = true;
+
+  // Validate email/username
+  if (emailInput.value.length < 3 || (!emailRegex.test(emailInput.value) && emailInput.value.indexOf(" ") !== -1)) {
+    emailError.style.display = "block";
+    valid = false;
+  } else {
+    emailError.style.display = "none";
+  }
+
+  // Validate password
+  if (!passwordRegex.test(passInput.value)) {
+    passError.style.display = "block";
+    valid = false;
+  } else {
+    passError.style.display = "none";
+  }
+
+  if (!valid) return;
+
+  // Remember me functionality
+  if (rememberMe.checked) {
+    localStorage.setItem("rememberedUser", emailInput.value);
+  } else {
+    localStorage.removeItem("rememberedUser");
+  }
+
+  // Open homepage in a new blank tab
+  window.open("GoBus_homepage.html", "_self");
+});
+
+// Autofill remembered user
+window.addEventListener("DOMContentLoaded", function() {
+  const remembered = localStorage.getItem("rememberedUser");
+  if (remembered) {
+    document.getElementById("loginEmail").value = remembered;
+    document.getElementById("rememberMe").checked = true;
+  }
+});
+    
+  </script>
+</body>
+</html>

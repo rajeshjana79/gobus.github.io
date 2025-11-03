@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoBus - Book & Timetable</title>
+<link rel="icon" href="Group2.jpg">
+<style>
+  :root {
+    --primary: #1e88e5;
+    --secondary: #1565c0;
+    --bg: #f5faff;
+    --card-bg: #ffffff;
+    --text: #0d1b2a;
+    --success: #43a047; /* selected */
+    --danger: #e53935;  /* booked */
+    --available: #90caf9; /* available */
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+  body { background: var(--bg); color: var(--text); padding: 20px; }
+
+  header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 30px; }
+  .logo-container { display: flex; align-items: center; background-color: rgb(121, 174, 214); padding: 6px 12px; border-radius: 40px; }
+  .logo-container img { height: 45px; width: 45px; margin-right: 10px; border-radius: 50%; }
+  .logo-text { font-size: 20px; font-weight: 700; color: black; }
+
+  .card { background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+  h2 { margin-bottom: 10px; }
+  p { margin-bottom: 15px; color: #555; }
+
+  .btn { background: var(--primary); color: white; padding: 12px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: center; transition: background 0.3s ease; }
+  .btn:hover { background: var(--secondary); }
+
+  /* Search bar */
+  .search-container { margin-bottom: 15px; display: flex; gap: 10px; }
+  .search-container input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+
+  /* Table */
+  .table-container { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; margin-top: 1rem; min-width: 500px; }
+  th, td { border: 1px solid #ddd; padding: 0.75rem; text-align: center; cursor: pointer; }
+  th { background: var(--primary); color: white; }
+  tr.selected { background-color: #cce5ff; }
+
+  /* Seat container */
+  .seat-container { display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
+  .bus-layout { display: inline-block; padding: 15px; background: #f0f4f8; border-radius: 12px; margin: 20px auto; }
+  .bus-front { font-size: 18px; margin-bottom: 10px; font-weight: bold; color: var(--secondary); }
+  .row { display: flex; justify-content: center; margin: 5px 0; }
+  .seat {
+    width: 50px; height: 50px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: transform 0.2s, background 0.2s;
+    font-weight: 600; margin: 0 5px;
+  }
+  .aisle { width: 30px; }
+  .seat.available { background: var(--available); color: #fff; }
+  .seat.selected { background: var(--success); color: white; }
+  .seat.booked { background: var(--danger); color: white; cursor: not-allowed; }
+  .seat:hover:not(.booked):not(.selected) { transform: scale(1.1); opacity: 0.9; }
+
+  @media (max-width: 768px) {
+    .btn { width: 100%; }
+    .seat { width: 40px; height: 40px; font-size: 12px; }
+    .aisle { width: 20px; }
+  }
+</style>
+</head>
+<body>
+<header>
+    <div class="logo-container" title="Go Bus">
+      <img src="Group2.jpg" alt="GoBus Logo" />
+      <div class="logo-text">Go Bus</div>
+    </div>
+</header>
+
+<section class="card">
+  <h2>Book Your Ticket</h2>
+  <p>Select your preferred bus and continue to choose seats.</p>
+
+  <!-- Search -->
+  <div class="search-container">
+    <input type="text" id="searchBox" placeholder="🔍 Search by route...">
+    <button class="btn" onclick="filterBuses()">Search</button>
+  </div>
+
+  <!-- Timetable -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Route</th>
+          <th>Departure</th>
+          <th>Arrival</th>
+        </tr>
+      </thead>
+      <tbody id="timetableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Seat Selection -->
+  <div class="seat-container" id="seatContainer">
+    <h3>🪑 Select Your Seats</h3>
+    <p id="selectedBusInfo"></p>
+    <div class="bus-layout" id="busLayout"></div>
+   <a href="GoBus - Payment Page.html" > <button class="btn" onclick="bookTicket()">✅ Confirm Booking</button></a>
+  </div>
+</section>
+
+<script>
+let selectedBus = null;
+let selectedSeats = [];
+let bookedSeats = [];
+
+// Load timetable
+function loadTimetable() {
+  const buses = [
+    { route: "City A → City B", departure: "08:00", arrival: "10:00" },
+    { route: "City B → City A", departure: "09:00", arrival: "11:00" },
+    { route: "City C → City D", departure: "12:00", arrival: "14:30" },
+  ];
+  const tbody = document.getElementById("timetableBody");
+  tbody.innerHTML = "";
+  buses.forEach(bus => {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${bus.route}</td><td>${bus.departure}</td><td>${bus.arrival}</td>`;
+    row.addEventListener("click", () => {
+      document.querySelectorAll("#timetableBody tr").forEach(r => r.classList.remove("selected"));
+      row.classList.add("selected");
+      selectedBus = bus;
+      showSeatSelection(bus);
+    });
+    tbody.appendChild(row);
+  });
+}
+
+// Search filter
+function filterBuses() {
+  const query = document.getElementById("searchBox").value.toLowerCase();
+  document.querySelectorAll("#timetableBody tr").forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(query) ? "" : "none";
+  });
+}
+
+// Show bus layout
+function showSeatSelection(bus) {
+  const container = document.getElementById("seatContainer");
+  container.style.display = "block";
+  document.getElementById("selectedBusInfo").textContent = `${bus.route} (${bus.departure} → ${bus.arrival})`;
+
+  const busLayout = document.getElementById("busLayout");
+  busLayout.innerHTML = `<div class="bus-front">🚍 Front (Driver)</div>`;
+  selectedSeats = [];
+
+  // Randomly mark some seats as booked for demo
+  bookedSeats = [];
+  for (let i = 0; i < 5; i++) {
+    bookedSeats.push(Math.floor(Math.random() * 20) + 1); // 5 random booked seats
+  }
+
+  let seatNumber = 1;
+  for (let r = 0; r < 5; r++) {
+    const row = document.createElement("div");
+    row.className = "row";
+
+    for (let c = 0; c < 2; c++) {
+      const seat = createSeat(seatNumber++);
+      row.appendChild(seat);
+    }
+
+    const aisle = document.createElement("div");
+    aisle.className = "aisle";
+    row.appendChild(aisle);
+
+    for (let c = 0; c < 2; c++) {
+      const seat = createSeat(seatNumber++);
+      row.appendChild(seat);
+    }
+
+    busLayout.appendChild(row);
+  }
+}
+
+// Create seat element
+function createSeat(num) {
+  const seat = document.createElement("div");
+  seat.className = "seat available";
+  seat.textContent = "S" + num;
+
+  if (bookedSeats.includes(num)) {
+    seat.classList.remove("available");
+    seat.classList.add("booked");
+  }
+
+  seat.addEventListener("click", () => toggleSeat(seat, num));
+  return seat;
+}
+
+// Toggle seat select/deselect
+function toggleSeat(seatElement, seatNumber) {
+  if (seatElement.classList.contains("booked")) return;
+
+  seatElement.classList.toggle("selected");
+
+  if (selectedSeats.includes(seatNumber)) {
+    selectedSeats = selectedSeats.filter(s => s !== seatNumber);
+  } else {
+    selectedSeats.push(seatNumber);
+  }
+}
+
+// Book ticket
+function bookTicket() {
+  if (!selectedBus || selectedSeats.length === 0) {
+    alert("Please select a bus and at least one seat!");
+    return;
+  }
+  const ticket = {
+    ...selectedBus,
+    seats: selectedSeats,
+    status: "Confirmed",
+    date: new Date().toLocaleDateString()
+  };
+  // Save to localStorage
+  let history = JSON.parse(localStorage.getItem("ticketHistory")) || [];
+  history.push(ticket);
+  localStorage.setItem("ticketHistory", JSON.stringify(history));
+
+  alert(`🎉 Ticket booked!\nBus: ${selectedBus.route}\nSeats: ${selectedSeats.join(", ")}`);
+  window.location.href = "tickethistory.html";
+}
+
+// Init
+loadTimetable();
+</script>
+</body>
+</html>

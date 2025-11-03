@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon"href="Group2.jpg">
+    <title>www.gobus.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+             background: linear-gradient(360deg, #cad1db, #fafbfc, #dee9ec);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Logo */
+    .logo-container {
+      position: absolute;
+      top: 15px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      user-select: none;
+      background-color: rgb(121, 174, 214);
+      padding: 8px 12Px;
+      border-radius:40px;
+      
+     
+    
+    }
+    .logo-container img {
+      height: 50px;
+      width: 50px;
+      margin-right: 10px;
+      border-radius: 50%;
+      
+    }
+    .logo-text {
+      font-size: 22px;
+      font-weight: 700;
+      color:blacK;
+      letter-spacing: 0.09em;
+      user-select: none;
+    }
+    .arrow {
+            margin-left: 10px;
+            font-size: 1.8em;
+            transition: transform 0.3s ease;
+            }
+
+        .start-btn:hover .arrow {
+            transform: translateX(4px);
+            }
+ .blink-text {
+    animation: blink 1.8s ease-in-out infinite;
+}
+        .welcome-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            padding: 32px 16px;
+            text-align: center;
+            max-width: 370px;
+            width: 95%;
+            animation: fadein 1.2s;
+        }
+        .bus-animation {
+            position: relative;
+            width: 100%;
+            height: 90px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+        .bus-move {
+            position: absolute;
+            left: -110px;
+            bottom: 0;
+            display: flex;
+            align-items: flex-end;
+            animation: busmove 10s linear infinite;
+        }
+        .bus-img {
+            width: 200px;
+            height: auto;
+            z-index: 2;
+        }
+        @keyframes busmove {
+            0% { left: -100px; }
+            100% { left: 100%; }
+            
+        }
+      
+     h1 {
+            font-size: 2em;
+            font-family:bold;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #0f2027, #15191b, #121213);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeSlideUp 1.2s ease-out forwards;
+            }
+    @keyframes fadeSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+         }
+    @keyframes pulseGlow {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+            }
+
+       p {
+        text-transform: capitalize;
+            font-size: 1em;
+            color: #333;
+            margin-bottom: 22px;
+            animation: fadeSlideUp 1.6s ease-out forwards;
+            }
+    h1::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 140%;
+            height: 140%;
+            background: radial-gradient(circle, rgba(0,201,255,0.2), transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulseGlow 1s infinite ease-in-out;
+     }
+    
+        .start-btn {
+                background: linear-gradient(135deg, #6e45e2, #88d3ce);
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                padding: 12px 32px;
+                font-size: 1em;
+                cursor: pointer;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                transition: all 0.3s ease;
+                position: relative;
+                }
+        .start-btn:hover {
+                background: linear-gradient(135deg, #4e2fae, #5fc9b8);
+                }
+        
+        @media (max-width: 500px) {
+            .welcome-container {
+                max-width: 98vw;
+                padding: 18px 4vw;
+                margin: 10px;
+            }
+            h1 {
+                font-size: 1.3em;
+            }
+            .bus-animation {
+                height: 100px;
+            }
+            .bus-img {
+                width: 100px;
+            }
+            .logo-container img {
+            width: 90px;
+    }
+        }
+     
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.2; }
+    100% { opacity: 1; }
+}
+.welcome-container {
+    max-width: 370px;
+}
+
+@media (min-width: 768px) {
+    .welcome-container {
+        max-width: 600px;  
+        padding: 40px 24px;
+    }
+    h1 { font-size: 2em; }
+    p { font-size: 1.1em; }
+}
+
+
+@media (min-width: 1024px) {
+    .welcome-container {
+        max-width: 800px;   
+        padding: 50px 32px;
+    }
+    h1 { font-size: 2.5em; }
+    p { font-size: 1.2em; }
+}
+  .logo-text {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0d0e0f;
+      letter-spacing: 0.06em;
+      user-select: none;
+    }
+    .logo-container {
+      position: absolute;
+      top: 15px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      user-select: none;
+      background-color: transparent;
+      padding: 8px 12px;
+      border-radius: 40px;
+     background-color: rgb(121, 174, 214);
+     
+    
+    }
+    .logo-container img {
+      height: 50px;
+      width: 50px;
+      margin-right: 10px;
+      border-radius: 50%;
+      
+    }
+
+    </style>
+
+</head>
+<body>
+ <div class="logo-container" title="Go Bus">
+    <img src="Group2.jpg" alt="GoBus Logo" />
+    <div class="logo-text">Go Bus</div>
+  </div>
+</div>
+    
+    <div class="welcome-container">
+        <div class="bus-animation">
+            <div class="bus-move">
+                
+                <img src="https://media.istockphoto.com/photos/white-bus-picture-id868717268?k=20&m=868717268&s=612x612&w=0&h=OP1oSBgxfZcGD1vONZ29ItTyz9gJ0l8ZSu4igCWb3Hw=" alt="Bus" class="bus-img">
+            
+                </div>  
+        </div>
+    
+        <h1>WELCOME TO GO BUS
+        <br><hr style="height: 2px;background-color: black;border: none;">
+        </h1>
+        <p>
+            real time bus tracker<br>
+            track your city busess in real time. know where your bus is, avoid long waits and travel smarter.
+        </p>
+        <button class="start-btn"onclick="location.href='login.html'"><span class="blink-text">Get Started<span class="arrow">→</span></span>
+ </button>
+    </div>
+</body>
+</html>

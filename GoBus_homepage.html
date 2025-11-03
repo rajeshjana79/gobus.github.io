@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoBus</title>
+  <link rel="icon" href="Group2.jpg">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #1e88e5;
+      --secondary: #1565c0;
+      --accent: #64b5f6;
+      --bg: #f5faff;
+      --card-bg: #ffffff;
+      --text: #0d1b2a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background: var(--bg); color: var(--text); }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e0e6ed;
+      padding: 12px 20px;
+      background: var(--card-bg);
+      position: relative;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      background-color: rgb(121, 174, 214);
+      padding: 6px 12px;
+      border-radius: 40px;
+      position: sticky;
+    }
+    .logo-container img {
+      height: 45px;
+      width: 45px;
+      margin-right: 10px;
+      border-radius: 50%;
+    }
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: black;
+      letter-spacing: 0.08em;
+      user-select: none;
+    }
+    
+    
+
+    .nav-profile-bar {
+      display: flex;
+      align-items: center;
+      margin: 1px;
+      gap: 20px;
+      padding-left:10px;
+      height:53px;
+      background: var(--card-bg);
+      border: 2px solid #b0c5db;
+      position: sticky;
+      top: 0;   
+      z-index: 1000;
+      background:#def1fa;
+    }
+    nav {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    nav a {
+      text-decoration: none;
+      color: black;
+      font-weight: 500;
+      position: relative;
+      padding: 10px;
+      font-size: 16px;
+      transition: color 0.3s;
+      font-family: 'Segoe UI', sans-serif;
+      
+    }
+    nav a::after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 8px;
+      height: 2px;
+      background: var(--primary);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    nav a:hover::after {
+      transform: scaleX(1);
+    }
+    nav a:hover { color: var(--primary); }
+    .profile {
+      display: flex;
+      align-items:center;
+      gap: 8px;
+      margin-left: auto;
+    }
+    .profile-img, .profile-letter {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      background: var(--primary);
+      text-transform: uppercase;
+    }
+    .profile-name {
+      font-weight: 500;
+      color:black;
+      font-size: 15px;
+      max-width: 120px;
+      padding-right: 50px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .hamburger {
+      flex-direction: column;
+      cursor: pointer;
+      gap: 6px;
+      display: none;
+      margin-left: 0;
+      margin-right: auto;
+    }
+    .hamburger span {
+      width: 26px;
+      height: 3px;
+      background:black;
+      border-radius: 2px;
+      transition: background 0.3s;
+    }
+    .hamburger:hover span {
+      background: var(--primary);
+      color: var(--primary);
+    }
+    @media (max-width: 768px) {
+      nav { display: none !important; }
+      .hamburger { display: flex!important; }
+    }
+    
+    .slidebar {
+      position: fixed;
+      top: 88px;
+      left: -250px;
+      width: 250px;
+      height: calc(100vh - 88px);
+      background: #d6dadd;
+      color: #080808;
+      transition: left 0.3s;
+      z-index: 2000;
+      padding-top: 20px;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.08);
+    }
+    .slidebar.active {
+      left: 0;
+    }
+    .slidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .slidebar ul li {
+      padding: 15px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.2s;
+      font-size: 17px;
+    }
+    .slidebar ul li:hover {
+      background: #89a1bc;
+    }
+    .slidebar ul li i {
+      width: 20px;
+    }
+    .slidebar-overlay {
+      position: fixed;
+      top: 88px;
+      left: 0;
+      width: 100vw;
+      height: calc(100vh - 70px);
+      background: rgba(0,0,0,0.18);
+      z-index: 1500;
+      display: none;
+    }
+    .slidebar-overlay.show {
+      display: block;
+    }
+    @media (min-width: 769px) {
+      .slidebar, .slidebar-overlay { display: none !important; }
+    }
+    a{
+      text-decoration: none;
+      user-select: none;
+      color: black;
+    }
+    a:hover{
+      color: #1a07ed;
+    }
+    .card {
+      background: var(--card-bg);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      margin-bottom: 5px;
+      padding: 40px;
+    }
+    .footer {
+      background: var(--card-bg);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      margin-bottom: 5px;
+      padding: 20px
+    }
+    .icon{
+      margin-right: 8px;
+      color:black;
+    }
+    #icon1:hover, #icon2:hover, #icon3:hover, #icon4:hover{
+      color: var(--primary);
+    }
+    #icon1, #icon2, #icon3, #icon4{
+      font-size: 1px;
+      margin-right: 10px;
+    }
+    nav li{
+      list-style: none;
+      display: inline-block;
+      margin-right: 20px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    h2 { margin-bottom: 10px; }
+    p { margin-bottom: 15px; color: #555; }
+    .categories { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+    .cat { flex: 1; text-align: center; padding: 12px; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; font-weight: 600; background: #f1f3f5; color: var(--secondary);}
+    .cat.active { background: var(--primary); color: white; }
+    .form-column { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; position: relative;}
+    .input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; width: 100%; text-align: center;}
+    .swap-btn { background: var(--secondary); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 18px; position: absolute; top: 50%; right: 10px; transform: translateY(-50%);}
+    .btn { background: var(--primary); color: white; padding: 12px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;}
+    .btn:hover { opacity: 0.9; }
+    .btn-secondary { background: var(--secondary); margin-top: 10px; width: 100%; }
+    .history { display: flex; flex-wrap: wrap; gap: 10px; }
+    .tag { background: #f1f3f5; padding: 8px 12px; border-radius: 6px; font-size: 14px; border: 1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <!-- Logo Header -->
+  <header>
+    <div class="logo-container" title="Go Bus">
+      <img src="Group2.jpg" alt="GoBus Logo" />
+      <div class="logo-text">Go Bus</div>
+    </div>
+  </header>
+
+  <!-- Navigation + Profile Section -->
+  <section class="nav-profile-bar">
+    <nav >
+      <li><a href="GoBus_homepage.html"target="_self"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="reactivelive_status.html"target="_self"><i class="fa fa-map-marker"></i> Live Status</a></li>
+      <li><a href="tikethistorty.html"target="_self"><i class="fa fa-ticket"></i> Tickets</a></li>
+      <li><a href="profile3.html"target=" _self"><i class="fa fa-id-card"></i> profile</a></li>
+      <li><a href=" "target=" _self"><i class="fa fa-id-card"></i> emergency</a></li>
+    </nav>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+    <a href="profile3.html" target="_self"class="profile" id="profileSection"></a>
+
+  </section>
+
+  <!-- Slidebar for Home Section (mobile/tablet) -->
+  <div class="slidebar" id="slidebar">
+    <ul>
+      <li><a href="GoBus_homepage.html"target="_self"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="reactivelive_status.html"target="_self"><i class="fa fa-map-marker"></i> Live Status</a></li>
+      <li><a href="tikethistorty.html"target="_self"><i class="fa fa-ticket"></i> Tickets</a></li>
+      <li><a href="profile3.html"target="_self"><i class="fa fa-id-card"></i> profile</a></li>
+     <li><a href=" "target=" _self"><i class="fa fa-id-card"></i> emergency</a></li>
+    </ul>
+  </div>
+  <div class="slidebar-overlay" id="slidebarOverlay"></div>
+
+  <section class="card">
+    <h2>Find Your Bus</h2>
+    <p>Search for Express, Local, or AC buses. Enter your route or bus number.</p>
+    <div class="categories">
+      <div class="cat active" onclick="selectCategory(this)">Express</div>
+      <div class="cat" onclick="selectCategory(this)">Local</div>
+      <div class="cat" onclick="selectCategory(this)">AC Bus</div>
+    </div>
+    <div class="form-column from-to-wrapper">
+      <input type="text" id="fromStand" class="input" placeholder="From Stand">
+      <input type="text" id="toStand" class="input" placeholder="To Stand">
+      <button class="swap-btn" onclick="swapStands()">⇅</button>
+    </div>
+    <div class="form-column">
+       <input type="text" id="busNumber" class="input" placeholder="Bus Number (optional)">
+      <button class="btn" onclick="searchBus()">Search</button>
+
+     
+    </div>
+  </section>
+
+  <section class="footer">
+    <h2>Previous Searches</h2>
+    <div class="history" id="historyList">
+      <span class="tag">Express: City A → City B</span>
+      <span class="tag">Local: Stop 12 → Stop 20</span>
+    </div>
+  </section>
+
+  <script>
+    // Hamburger slidebar logic
+    const hamburger = document.getElementById("hamburger");
+    const slidebar = document.getElementById("slidebar");
+    const slidebarOverlay = document.getElementById("slidebarOverlay");
+
+    hamburger.addEventListener("click", () => {
+      slidebar.classList.add("active");
+      slidebarOverlay.classList.add("show");
+    });
+    slidebarOverlay.addEventListener("click", () => {
+      slidebar.classList.remove("active");
+      slidebarOverlay.classList.remove("show");
+    });
+
+    // Profile
+    function getRandomProfileColor() {
+      const colors = ['#1e88e5', '#e53935', '#43a047', '#fbc02d', '#8e24aa', '#00897b'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+    function renderProfile() {
+      const profileMain = document.getElementById('profileSection');
+      profileMain.innerHTML = '';
+      let username = localStorage.getItem('username');
+      let profilePic = localStorage.getItem('profilePic');
+      if (profilePic) {
+        // Show uploaded image
+        let img = document.createElement('img');
+        img.className = 'profile-img';
+        img.src = profilePic;
+        img.alt = 'Profile';
+        profileMain.appendChild(img);
+        let nameSpan = document.createElement('span');
+        nameSpan.className = 'profile-name';
+        nameSpan.textContent = username ? username : '';
+        profileMain.appendChild(nameSpan);
+      } else if (username && username.trim().length > 0) {
+        // Show colored letter
+        let firstLetter = username.trim()[0].toUpperCase();
+        let color = getRandomProfileColor();
+        let letterDiv = document.createElement('div');
+        letterDiv.className = 'profile-letter';
+        letterDiv.style.background = color;
+        letterDiv.textContent = firstLetter;
+        profileMain.appendChild(letterDiv);
+        let nameSpan = document.createElement('span');
+        nameSpan.className = 'profile-name';
+        nameSpan.textContent = username;
+        profileMain.appendChild(nameSpan);
+      } else {
+        // Default guest
+        let img = document.createElement('img');
+        img.className = 'profile-img';
+        img.src = './GoBus_homepage_files/profile.jpg';
+        img.alt = 'Profile';
+        profileMain.appendChild(img);
+        let nameSpan = document.createElement('span');
+        nameSpan.className = 'profile-name';
+        nameSpan.textContent = 'Guest';
+        profileMain.appendChild(nameSpan);
+      }
+    }
+    renderProfile();
+
+    // Category
+    function selectCategory(el) {
+      document.querySelectorAll('.cat').forEach(cat => cat.classList.remove('active'));
+      el.classList.add('active');
+    }
+    // Swap
+    function swapStands() {
+      const fromInput = document.getElementById('fromStand');
+      const toInput = document.getElementById('toStand');
+      [fromInput.value, toInput.value] = [toInput.value, fromInput.value];
+    }
+    // Search
+    function searchBus() {
+      const category = document.querySelector('.cat.active').innerText;
+      const from = document.getElementById('fromStand').value;
+      const to = document.getElementById('toStand').value;
+      const busNo = document.getElementById('busNumber').value;
+      if (!from || !to) {
+        alert("Please enter both From and To stands");
+        return;
+      }
+      let searchText = `${category}: ${from} → ${to}`;
+      if (busNo) searchText += ` (Bus ${busNo})`;
+      const tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.innerText = searchText;
+      document.getElementById('historyList').appendChild(tag);
+      document.getElementById('fromStand').value = "";
+      document.getElementById('toStand').value = "";
+      document.getElementById('busNumber').value = "";
+
+      // Save search info to localStorage if needed
+      localStorage.setItem('searchCategory', category);
+      localStorage.setItem('searchFrom', from);
+      localStorage.setItem('searchTo', to);
+      localStorage.setItem('searchBusNo', busNo);
+
+      // Redirect to Book Ticket page
+      window.location.href = "bookseat.html";
+    }
+    
+  </script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GoBus - Ticket History</title>
+  <link rel="icon" href="Group2.jpg">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #1e88e5;
+      --secondary: #42a5f5;
+      --success: #43a047;
+      --pending: #f9a825;
+      --danger: #e53935;
+      --bg: #f4f7fb;
+    }
+
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      background: var(--bg);
+      color: #0f172a;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 16px;
+    }
+
+    .ticket-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .ticket {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .ticket:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+    }
+
+    .ticket::before {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 120px;
+      height: 120px;
+      background: var(--primary);
+      opacity: 0.1;
+      border-radius: 50%;
+      z-index: 0;
+    }
+
+    .ticket h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .ticket p {
+      margin: 6px 0;
+      font-size: 14px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 8px;
+      animation: pulse 1.5s infinite;
+    }
+
+    .confirmed { background: var(--success); color: white; }
+    .pending { background: var(--pending); color: white; }
+    .canceled { background: var(--danger); color: white; }
+
+    .back {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 12px 20px;
+      background: var(--primary);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    .back:hover {
+      background: var(--secondary);
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.85; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Mobile friendly */
+    @media (max-width: 600px) {
+      header { font-size: 18px; padding: 16px; }
+      .ticket { padding: 16px; }
+      .ticket h3 { font-size: 16px; }
+      .ticket p { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <header>🎟 Ticket History</header>
+  <div class="container">
+    <div class="ticket-grid">
+
+      <div class="ticket">
+        <h3>Express 101</h3>
+        <p><strong>From:</strong> City A → <strong>To:</strong> City B</p>
+        <p><strong>Date:</strong> 20 Sept 2025</p>
+        <p><strong>Seat:</strong> 12A</p>
+        <span class="status confirmed">Confirmed ✅</span>
+      </div>
+
+      <div class="ticket">
+        <h3>Deluxe 202</h3>
+        <p><strong>From:</strong> City C → <strong>To:</strong> City D</p>
+        <p><strong>Date:</strong> 25 Sept 2025</p>
+        <p><strong>Seat:</strong> 7B</p>
+        <span class="status pending">Pending ⏳</span>
+      </div>
+
+      <div class="ticket">
+        <h3>Nightliner 303</h3>
+        <p><strong>From:</strong> City E → <strong>To:</strong> City F</p>
+        <p><strong>Date:</strong> 2 Oct 2025</p>
+        <p><strong>Seat:</strong> 22C</p>
+        <span class="status canceled">Canceled ❌</span>
+      </div>
+
+    </div>
+    <a href="GoBus_homepage.html" class="back">← Back to Profile</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoBus - Manage Profile</title>
+  <link rel="icon" href="Group2.jpg">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #1e88e5;
+      --secondary: #6a1b9a;
+      --accent: #ffca28;
+      --bg: linear-gradient(135deg, #cfc5cf, #cdc9d3);
+      --card-bg: #fff;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background:rgb(201, 218, 243);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      max-width: 500px;
+      width: 100%;
+      padding: 2rem;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity:0; transform: translateY(20px);}
+      to { opacity:1; transform: translateY(0);}
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: black;
+    }
+
+    .avatar {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+      position: relative;
+    }
+    .avatar img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid black;
+    }
+    .edit-icon {
+      position: absolute;
+      bottom: 10px;
+      right: calc(50% - 60px); /* align on avatar */
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      padding: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .edit-icon:hover { background: #0d47a1; }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      transition: border-color 0.3s;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 5px rgba(30,136,229,0.3);
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 1.5rem;
+    }
+    button {
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    button:hover { transform: scale(1.03); }
+    .btn-save { background: var(--primary); color: #fff; }
+    .btn-cancel { background: var(--accent); color: #333; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--secondary);
+      color: #fff;
+      padding: 14px 18px;
+      border-radius: 10px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Back button */
+ /* Back button inside container */
+.back-btn {
+  position: absolute;  /* relative to container */
+  top: 20px;
+  left: 20px;
+  background: #313c4e;
+  color: #fff;
+  border-radius: 10%;
+  width: 45px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  transition: background 0.3s, transform 0.2s;
+  text-decoration: none;
+}
+
+/* hover effect */
+.back-btn:hover {
+  background: #0d47a1;
+  transform: scale(1.1);
+}
+
+/* Make container relative so back button stays inside */
+.container {
+  position: relative;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+     <a href="profile3.html" class="back-btn" title="Back to Home">
+    <i class="fa fa-arrow-left"></i>
+  </a>
+    <h2><i class="fa-solid fa-user-pen"></i> Manage Profile</h2>
+
+    <!-- Avatar -->
+    <div class="avatar">
+      <img id="profilePic" src="https://via.placeholder.com/120" alt="Profile Picture">
+      <label for="profileUpload" class="edit-icon"><i class="fa fa-pencil"></i></label>
+      <input type="file" id="profileUpload" accept="image/*" style="display:none;">
+    </div>
+
+    <!-- Form -->
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" placeholder="Enter your full name">
+    </div>
+    <div class="form-group">
+      <label for="dob">Date of Birth</label>
+      <input type="date" id="dob">
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" placeholder="Enter your phone number">
+    </div>
+    <div class="form-group">
+      <label for="address">Address</label>
+      <textarea id="address" rows="3" placeholder="Enter your address"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="city">City</label>
+      <input type="text" id="city" placeholder="Enter your city">
+    </div>
+    <div class="form-group">
+      <label for="state">State</label>
+      <input type="text" id="state" placeholder="Enter your state">
+    </div>
+
+    <!-- Buttons -->
+    <div class="actions">
+      <button class="btn-save" onclick="saveProfile()"><i class="fa-solid fa-check"></i> Save</button>
+      <button class="btn-cancel" onclick="goback()"><i class="fa-solid fa-xmark"></i> Cancel</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Profile saved successfully!</div>
+
+  <script>
+    const profileUpload = document.getElementById("profileUpload");
+    const profilePic = document.getElementById("profilePic");
+
+    profileUpload.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          profilePic.src = evt.target.result;
+          localStorage.setItem("profilePic", evt.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function saveProfile() {
+      const name = document.getElementById("name").value;
+      localStorage.setItem("username", name);
+      showToast();
+    }
+
+    function resetForm() {
+      document.getElementById("name").value = "";
+      document.getElementById("dob").value = "";
+      document.getElementById("phone").value = "";
+      document.getElementById("address").value = "";
+      document.getElementById("city").value = "";
+      document.getElementById("state").value = "";
+    }
+
+    function showToast() {
+      const toast = document.getElementById("toast");
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    // Load saved profile
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedPic = localStorage.getItem("profilePic");
+      if (savedPic) profilePic.src = savedPic;
+      const savedName = localStorage.getItem("username");
+      if (savedName) document.getElementById("name").value = savedName;
+    });
+    function goback(){
+      window.location.href="profile3.html";
+    }
+  </script>
+</body>
+</html>

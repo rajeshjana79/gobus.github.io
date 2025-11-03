@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment History</title>
+  <link rel="icon" href="Group2.jpg">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #1e88e5;
+      --secondary: #1565c0;
+      --bg: #f5faff;
+      --card-bg: #ffffff;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        background-color: rgb(121, 174, 214);
+        padding: 6px 12px;
+        border-radius: 40px;
+        position: sticky;
+      }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--secondary);
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    h2 {
+      color: black;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input, select, button {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background: var(--primary);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--secondary);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background: var(--primary);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    .pagination {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+    }
+     .logo-container {
+      display: flex;
+      align-items: center;
+      background-color: rgb(121, 174, 214);
+      padding: 6px 12px;
+      border-radius: 40px;
+      position: sticky;
+    }
+    .logo-container img {
+      height: 45px;
+      width: 45px;
+      margin-right: 10px;
+      border-radius: 50%;
+    }
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: black;
+      letter-spacing: 0.08em;
+      user-select: none;
+    }
+    .search-filter {
+      margin-bottom: 20px;
+      border: 1px solid #0f0f0f;
+      padding: 15px;
+      border-radius: 10px;
+      background: #e8eff3;
+      }
+     .search-filter {
+  margin-bottom: 50px;
+  border: 1px solid #0f0f0f;
+  padding: 15px 15px 15px 70px; /* extra left padding for button */
+  border-radius: 10px;
+  background: #e8eff3;
+  position: relative; /* makes back-btn position relative to this */
+}
+
+.back-btn {
+  position: absolute;  /* relative to search-filter */
+  top: 15px;
+  left: 15px;
+  background: #313c4e;
+  color: #fff;
+  border-radius: 10%;
+  width: 45px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  transition: background 0.3s, transform 0.2s;
+  text-decoration: none;
+}
+
+.back-btn:hover {
+  background: #0d47a1;
+  transform: scale(1.1);
+}
+
+    
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container" title="Go Bus">
+      <img src="Group2.jpg" alt="GoBus Logo" />
+      <div class="logo-text">Go Bus</div>
+    </div>
+  </header>
+<div class="search-filter">
+  <a href="profile3.html" class="back-btn" title="Back to Home">
+    <i class="fa fa-arrow-left"></i>
+  </a>
+  <h2>Payment History</h2>
+
+  <div class="controls">
+    <input type="text" id="search" placeholder="Search by ID...">
+    <select id="methodFilter">
+      <option value="">All Methods</option>
+      <option value="Card">Card</option>
+      <option value="UPI">UPI</option>
+    </select>
+    <select id="statusFilter">
+      <option value="">All Status</option>
+      <option value="Success">Success</option>
+      <option value="Failed">Failed</option>
+    </select>
+    <input type="date" id="dateFilter">
+    <button onclick="exportCSV()">Export CSV</button>
+  </div>
+</div>
+  
+
+  <table id="paymentTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">ID</th>
+        <th onclick="sortTable(1)">Date</th>
+        <th onclick="sortTable(2)">Method</th>
+        <th onclick="sortTable(3)">Amount</th>
+        <th onclick="sortTable(4)">Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="pagination">
+    <button onclick="prevPage()">Prev</button>
+    <span id="pageInfo"></span>
+    <button onclick="nextPage()">Next</button>
+  </div>
+
+  <div class="modal" id="detailModal">
+    <div class="modal-content">
+      <h3>Transaction Details</h3>
+      <div id="modalBody"></div>
+      <button onclick="downloadReceipt()">Download Receipt</button>
+      <button onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const SAMPLE_DATA = [
+      {id: 'TXN001', date: '2025-09-01', method: 'Card', amount: '250', status: 'Success'},
+      {id: 'TXN002', date: '2025-09-03', method: 'UPI', amount: '150', status: 'Failed'},
+      {id: 'TXN003', date: '2025-09-05', method: 'Card', amount: '300', status: 'Success'}
+    ];
+
+    let currentPage = 1;
+    const rowsPerPage = 5;
+    let filteredData = SAMPLE_DATA;
+
+    function renderTable() {
+      const tbody = document.querySelector('#paymentTable tbody');
+      tbody.innerHTML = '';
+      let start = (currentPage - 1) * rowsPerPage;
+      let end = start + rowsPerPage;
+      let pageData = filteredData.slice(start, end);
+      for (let row of pageData) {
+        tbody.innerHTML += `
+          <tr>
+            <td>${row.id}</td>
+            <td>${row.date}</td>
+            <td>${row.method}</td>
+            <td>₹${row.amount}</td>
+            <td>${row.status}</td>
+            <td><button onclick="openModal('${row.id}')">Details</button></td>
+          </tr>
+        `;
+      }
+      document.getElementById('pageInfo').innerText = `Page ${currentPage} of ${Math.ceil(filteredData.length / rowsPerPage)}`;
+    }
+
+    function prevPage() { if (currentPage > 1) { currentPage--; renderTable(); } }
+    function nextPage() { if (currentPage * rowsPerPage < filteredData.length) { currentPage++; renderTable(); } }
+
+    document.getElementById('search').addEventListener('input', filterData);
+    document.getElementById('methodFilter').addEventListener('change', filterData);
+    document.getElementById('statusFilter').addEventListener('change', filterData);
+    document.getElementById('dateFilter').addEventListener('change', filterData);
+
+    function filterData() {
+      const search = document.getElementById('search').value.toLowerCase();
+      const method = document.getElementById('methodFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      const date = document.getElementById('dateFilter').value;
+      filteredData = SAMPLE_DATA.filter(r =>
+        (!search || r.id.toLowerCase().includes(search)) &&
+        (!method || r.method === method) &&
+        (!status || r.status === status) &&
+        (!date || r.date === date)
+      );
+      currentPage = 1;
+      renderTable();
+    }
+
+    function sortTable(colIndex) {
+      const keys = ['id', 'date', 'method', 'amount', 'status'];
+      const key = keys[colIndex];
+      filteredData.sort((a, b) => (a[key] > b[key] ? 1 : -1));
+      renderTable();
+    }
+
+    function openModal(id) {
+      const txn = SAMPLE_DATA.find(r => r.id === id);
+      document.getElementById('modalBody').innerHTML = `
+        <p><b>ID:</b> ${txn.id}</p>
+        <p><b>Date:</b> ${txn.date}</p>
+        <p><b>Method:</b> ${txn.method}</p>
+        <p><b>Amount:</b> ₹${txn.amount}</p>
+        <p><b>Status:</b> ${txn.status}</p>
+      `;
+      document.getElementById('detailModal').style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('detailModal').style.display = 'none'; }
+    function downloadReceipt() { alert('Receipt downloaded!'); }
+
+    function exportCSV() {
+      let csv = 'ID,Date,Method,Amount,Status\n';
+      for (let r of filteredData) {
+        csv += `${r.id},${r.date},${r.method},${r.amount},${r.status}\n`;
+      }
+      let blob = new Blob([csv], { type: 'text/csv' });
+      let url = window.URL.createObjectURL(blob);
+      let a = document.createElement('a');
+      a.href = url;
+      a.download = 'payment_history.csv';
+      a.click();
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>

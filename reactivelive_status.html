@@ -1,0 +1,340 @@
+ 
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GoBus | Live Bus Status</title>
+  <link rel="icon" href="Group2.jpg">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #1e88e5;
+      --secondary: #1565c0;
+      --bg: #f5faff;
+      --card-bg: #ffffff;
+      --text: #0d1b2a;
+      --muted: #64748b;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    *{box-sizing:border-box; margin:0; padding:0;}
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      background: var(--card-bg);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 24px;
+      border-bottom:1px solid #e0e6ed;
+      box-shadow:0 2px 6px rgba(0,0,0,0.05);
+      position: sticky;
+      top:0;
+      z-index:1000;
+    }
+  
+  
+     .logo-container {
+      display: flex;
+      align-items: center;
+      background-color: rgb(121, 174, 214);
+      padding: 6px 12px;
+      border-radius: 40px;
+      position: sticky;
+    }
+    .logo-container img {
+      height: 45px;
+      width: 45px;
+      margin-right: 10px;
+      border-radius: 50%;
+    }
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: black;
+      letter-spacing: 0.08em;
+      user-select: none;
+    }
+    .container{
+      max-width:800px;
+      margin:35px auto;
+      padding:0 19px;
+    }
+    
+
+    h1 {
+      font: size 29px;
+      margin-bottom:6px;
+      color: var(--secondary);
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size:19px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius:12px;
+      padding:20px;
+      box-shadow:0 4px 14px rgba(0,0,0,0.06);
+      margin-top:20px;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:16px;
+    }
+    .search-bar input, .search-bar button {
+      padding:10px 14px;
+      border-radius:8px;
+      border:1px solid #cbd5e1;
+      font-size:14px;
+    }
+    .search-bar input {
+      flex:1;
+      min-width:180px;
+    }
+    .search-bar button {
+      background: var(--primary);
+      color:#fff;
+      border:none;
+      cursor:pointer;
+      transition: background 0.3s;
+    }
+    .search-bar button:hover {
+      background: var(--secondary);
+    }
+
+    /* Table (desktop/tablet) */
+    table {
+      width:100%;
+      border-collapse:collapse;
+    }
+    thead th {
+      text-align:left;
+      padding:12px 10px;
+      font-size:13px;
+      font-weight:600;
+      color: var(--muted);
+      border-bottom:2px solid #e2e8f0;
+    }
+    tbody td {
+      padding:12px 10px;
+      border-bottom:1px solid #f1f5f9;
+      font-size:14px;
+    }
+    tbody tr:hover {
+      background:#f9fafb;
+    }
+
+    /* Status badges */
+    .badge {
+      padding:6px 10px;
+      border-radius:20px;
+      font-weight:600;
+      font-size:12px;
+      display:inline-block;
+    }
+    .ok { background:#dcfce7; color:var(--ok); }
+    .delayed { background:#fef9c3; color:var(--warn); }
+    .off { background:#fee2e2; color:var(--bad); }
+
+    .route { font-weight:600; }
+    .muted-small { color: var(--muted); font-size:12px; }
+
+    .footer {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:12px;
+      font-size:13px;
+      color: var(--muted);
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    /* Responsive design */
+    @media (max-width:768px) {
+      .search-bar {flex-direction:column;}
+
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+      thead { display: none; }
+
+      tbody tr {
+        background: #f9fafb;
+        border:1px solid #e2e8f0;
+        border-radius:8px;
+        margin-bottom:16px;
+        padding:12px;
+      }
+      tbody td {
+        border:none;
+        padding:6px 0;
+      }
+      tbody td:before {
+        content: attr(data-label);
+        font-weight:600;
+        color: var(--muted);
+        display:block;
+        margin-bottom:2px;
+        font-size:12px;
+      }
+    }
+    .back-btn {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+    }
+.arrow-left {
+  font-size: 24px;
+  color: black;
+  transition: transform 0.3s ease;
+  
+ }
+
+/* hover effect */
+.back-btn:hover {
+ 
+  transform: scale(1.2);
+}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container" title="Go Bus">
+      <img src="Group2.jpg" alt="GoBus Logo" />
+      <div class="logo-text">Go Bus</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <a href="GoBus_homepage.html"  class="back-btn" title="Back to Home">
+    <i class="fa fa-arrow-left"class="arrow-left"></i>
+  </a>
+    <h1>Live Bus Status</h1>
+    <div class="subtitle">Track arrivals, delays, and bus locations in real time</div>
+
+    <div class="card">
+      <div class="search-bar">
+        <input id="q" placeholder="Search route, stop or vehicle ID">
+        <button id="refreshBtn">search</button>
+      </div>
+
+      <div style="overflow:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Route</th>
+              <th>Status</th>
+              <th>ETA</th>
+              <th>Next Stop</th>
+              <th>Vehicle</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="footer">
+        <div id="lastUpdated">Last updated: —</div>
+        <div>Data is mocked. Connect API for real-time GPS feed.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tbody = document.getElementById('tbody');
+    const q = document.getElementById('q');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const lastUpdated = document.getElementById('lastUpdated');
+
+    const vehicles = ['MH01AB1234','MH02CD5678','KA05EF9012','DL4CAF2020','WB20GH3030'];
+
+    function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+
+    function sampleRoutes(){
+      return [
+        {route:'24A',name:'Airport — Central',status:'on_time'},
+        {route:'12B',name:'City Mall — Riverside',status:'delayed'},
+        {route:'45C',name:'North Park — Old Town',status:'arrived'},
+        {route:'7X', name:'Station — University', status:'on_time'},
+        {route:'90', name:'Industrial Area — Central', status:'on_time'},
+      ]
+    }
+
+    function fetchMockData(){
+      const base = sampleRoutes();
+      return base.map(r=>{
+        const eta = r.status==='arrived'?0:randomInt(1,18);
+        const delay = r.status==='delayed'?randomInt(3,20):0;
+        const vehicle = vehicles[randomInt(0, vehicles.length-1)];
+        const locs = ['Main St & 5th','Central Station','Market Rd','Riverside Blvd','Gate 3'];
+        const loc = locs[randomInt(0,4)];
+        return {
+          route:r.route,
+          name:r.name,
+          status:r.status,
+          eta: eta + (delay>0?(' + '+delay+' min delay'):''),
+          next_stop: loc,
+          vehicle
+        }
+      })
+    }
+
+    let latestData=[];
+
+    function renderTable(data){
+      tbody.innerHTML='';
+      if(!data.length){
+        tbody.innerHTML='<tr><td colspan="5" class="muted-small">No vehicles found</td></tr>';
+        return;
+      }
+      data.forEach(item=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`
+          <td data-label="Route"><div class="route">${item.route}</div><div class="muted-small">${item.name}</div></td>
+          <td data-label="Status"><span class="badge ${item.status==='on_time'?'ok':item.status==='delayed'?'delayed':'off'}">${item.status==='on_time'?'On time':item.status==='delayed'?'Delayed':'Arrived'}</span></td>
+          <td data-label="ETA">${item.eta}</td>
+          <td data-label="Next Stop">${item.next_stop}</td>
+          <td data-label="Vehicle">${item.vehicle}</td>
+        `;
+        tbody.appendChild(tr);
+      })
+    }
+
+    function applyFiltersAndRender(){
+      const term=q.value.trim().toLowerCase();
+      let filtered=latestData.slice();
+      if(term) filtered=filtered.filter(i=>(i.route+' '+i.name+' '+i.next_stop+' '+i.vehicle).toLowerCase().includes(term));
+      renderTable(filtered);
+    }
+
+    function refresh(){
+      latestData=fetchMockData();
+      applyFiltersAndRender();
+      lastUpdated.textContent='Last updated: '+new Date().toLocaleTimeString();
+    }
+
+    q.addEventListener('input',applyFiltersAndRender);
+    refreshBtn.addEventListener('click',refresh);
+
+    refresh();
+    setInterval(refresh,12000);
+  </script>
+</body>
+</html>

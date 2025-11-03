@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoBus - Ticket</title>
+  <style>
+    :root {
+      --primary: #1e88e5;
+      --secondary: #1565c0;
+      --muted: #6c757d;
+      --card-bg: #ffffff;
+      --bg: #f0f4ff;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 0;
+      color: #0d47a1;
+    }
+
+    /* ---------- HEADER ---------- */
+    header {
+      background: var(--card-bg);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 24px;
+      border-bottom:1px solid #e0e6ed;
+      box-shadow:0 2px 6px rgba(0,0,0,0.05);
+      position: sticky;
+      top:0;
+      z-index:1000;
+    }
+    .logo-container {
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .logo-container img {
+      height:40px;
+      width:40px;
+      border-radius:50%;
+    }
+    .logo-text {
+      font-size:20px;
+      font-weight:700;
+      color: var(--secondary);
+    }
+
+    /* ---------- MAIN CONTAINER ---------- */
+    .container {
+      max-width:1100px;
+      margin:24px auto;
+      padding:0 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* ---------- TICKET ---------- */
+    .ticket-box {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      border: 3px solid var(--secondary);
+    }
+
+    .ticket-header {
+      background: var(--secondary);
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .ticket-info p {
+      margin: 6px 0;
+      font-size: 15px;
+      word-wrap: break-word;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #d32f2f;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      margin-top: 15px;
+      color: #444;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 600px) {
+      .ticket-box {
+        padding: 15px;
+        border-width: 2px;
+      }
+      .ticket-header {
+        font-size: 18px;
+        padding: 8px;
+      }
+      .ticket-info p {
+        font-size: 14px;
+      }
+      .logo-text {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="logo-container">
+      <img src="Group2.jpg" alt="GoBus Logo">
+      <div class="logo-text">GoBus</div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <div class="ticket-box">
+      <div class="ticket-header">GoBus - Happy Journey</div>
+
+      <div class="ticket-info">
+        <p><strong>Passenger:</strong> Mr. Rahul Sharma</p>
+        <p><strong>Age:</strong> 24 years</p>
+        <p><strong>Bus:</strong> Volvo AC Sleeper</p>
+        <p><strong>Route:</strong> Kolkata → Digha</p>
+        <p><strong>Date:</strong> 15 Sept 2025</p>
+        <p><strong>Seat:</strong> 12A</p>
+        <p><strong>Fare:</strong> ₹1500</p>
+        <p><strong>Booking ID:</strong> GBUS123456</p>
+        <p><strong>Validity:</strong> <span class="highlight">15/09/2025</span></p>
+        <p><strong>Class:</strong> Comfort</p>
+      </div>
+
+      <div class="footer">
+        For support, call GoBus helpline: 1800-111-222<br>
+        © 2025 GoBus Pvt Ltd
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Example: dynamically load data from localStorage / DB
+    const ticket = JSON.parse(localStorage.getItem("ticketData"));
+    if(ticket){
+      document.body.innerHTML = document.body.innerHTML
+        .replace("Mr. Rahul Sharma", ticket.name)
+        .replace("24 years", ticket.age + " years")
+        .replace("Volvo AC Sleeper", ticket.bus)
+        .replace("Kolkata → Digha", ticket.route)
+        .replace("15 Sept 2025", ticket.date)
+        .replace("12A", ticket.seat)
+        .replace("₹1500", "₹" + ticket.fare)
+        .replace("GBUS123456", ticket.bookingId)
+        .replace("15/09/2025", ticket.validity);
+    }
+  </script>
+</body>
+</html>
